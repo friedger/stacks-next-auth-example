@@ -24,8 +24,8 @@ const auth: NextApiHandler = async (req, res) => {
       },
       async authorize(credentials) {
         try {
+          console.log({credentials})
           const siwe = new SignInWithStacksMessage(credentials?.message || "");
-
           const result = await siwe.verify({
             signature: credentials?.signature || "",
             domain: process.env.NEXTAUTH_URL,
@@ -39,6 +39,7 @@ const auth: NextApiHandler = async (req, res) => {
           }
           return null;
         } catch (e) {
+          console.log(e);
           return null;
         }
       },
@@ -46,7 +47,7 @@ const auth: NextApiHandler = async (req, res) => {
   ];
 
   const isDefaultSigninPage =
-    req.method === "GET" && req.query.nextauth.includes("signin");
+    req.method === "GET" && req.query?.nextauth?.includes("signin");
 
   // Hide Sign-In with Ethereum from default sign page
   if (isDefaultSigninPage) {
